@@ -38,11 +38,6 @@ void display(){
 		glVertex2f(-0.1f,0.0f);
 		glVertex2f(-0.3f,0.5f);
 	glEnd();
-
-	// glBegin(GL_POINTS);
-   	// 	glColor3f(1.0f,0.0f,0.0f);
-   	// 	glVertex2f(-0.3f,0.25f);
-   	// glEnd();
    	glPopMatrix();
 
    	glPushMatrix();
@@ -57,12 +52,7 @@ void display(){
 		glVertex2f(0.2f,0.4f);
 		glVertex2f(0.1f,0.2f);
 	glEnd();
-
-	// glBegin(GL_POINTS);
-   	// 	glColor3f(1.0f,0.0f,0.0f);
-   	// 	glVertex2f(0.2f,0.28f);
-   	// glEnd();
-   	glPopMatrix();
+	glPopMatrix();
 
 	glPushMatrix();
    	glTranslatef(0.0f,-0.5f,0.0f);
@@ -75,10 +65,7 @@ void display(){
 		glVertex2f(0.2f,-0.6f);
 		glVertex2f(0.1f,-0.2f);
 	glEnd();
-	// glBegin(GL_POINTS);
-   	// 	glColor3f(1.0f,0.0f,0.0f);
-   	// 	glVertex2f(0.0f,-0.5f);
-   	// glEnd();
+	
 	glPopMatrix();
 	
 	glFlush();
