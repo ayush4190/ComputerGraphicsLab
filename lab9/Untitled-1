@@ -1,0 +1,14 @@
+#inlcude<iostream>
+#inlcude<Gl/glut.h>
+using namespace std;
+
+void myinit()
+{
+
+}
+
+int main()
+{
+    
+
+}
