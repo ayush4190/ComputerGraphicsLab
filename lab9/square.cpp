@@ -1,107 +1,87 @@
-#include<GL/glut.h>
 #include<iostream>
+#include <GL/glut.h>
+#include<math.h>
 using namespace std;
+void display();
+int N;
+float xt1 , yt1 , xt2 , yt2 , xt3 , yt3 , xt4 ,yt4 ;
+void myinit()
+{
+glClearColor(0.0,0,0,0);
+    glMatrixMode(GL_PROJECTION);
+    gluOrtho2D(-300,300,-300,300);
 
-int v1[2],v2[2],v3[2],v4[2];
-int n;
- int a1[2],b1[2],c1[2],d1[2];
-void initGL(){
-    glClearColor(0.0f,0.0f,0.0f,1.0f);
-    gluOrtho2D(0,400,0,400);
 }
-void show(int a[2]){
-    cout<<"display: "<<a[0]<<" "<<a[1]<<endl;
-}
-void draw_square(int a[2],int b[2], int c[2], int d[2]){
-    
-       
-        glColor3f(0.0f,1.0f,0.0f);
-        glVertex2f(a[0],a[1]);
-        glVertex2f(b[0],b[1]);
-        glVertex2f(c[0],c[1]);
-        glVertex2f(d[0],d[1]);
-       
-       
-        a1[0]=(2*a[0]+d[0])/3;
-        a1[1]=(2*a[1]+b[1])/3;
-        b1[0]=(2*b[0]+c[0])/3;
-        b1[1]=(2*b[1]+a[1])/3;
-        c1[0]=(2*c[0]+b[0])/3;
-        c1[1]=(2*c[1]+d[1])/3;
-        d1[0]=(2*d[0]+a[0])/3;
-        d1[1]=(2*d[1]+c[1])/3;
 
-        show(a1); show(b1); show(c1); show(d1);
-        
-        glColor3f(0.0f,0.0f,1.0f);
-        glVertex2f(a1[0],a1[1]);
-        glVertex2f(b1[0],b1[1]);
-        glVertex2f(c1[0],c1[1]);
-        glVertex2f(d1[0],d1[1]);
-        
-        cout<<"hi"<<endl;
-}
-void divide_square(int a[2],int b[2], int c[2], int d[2], int m){
-    int v0[2], v1[2], v2[2],v3[2],j;
-    show(a);show(b);show(c);show(d);
-    if(m>0){
-        v0[0]=a[0];
-        v0[1]=(a[1]+2*b[1])/3;
-        v1[0]=b[0];
-        v1[1]=b[1];
-        v2[0]=(c[0]+2*b[0])/3;
-        v2[1]=b[1];
-        v3[0]=v2[0];
-        v3[1]=v0[1];
-
-        draw_square(v0,v1,v2,v3);
-
-        int a1[2],b1[2],c1[2],d1[2];
-        a1[0]=a[0];a1[1]=a[1];
-        b1[0]=a[0];
-        b1[1]=(a[1]+v0[1])/2;
-
-        int temp[2];
-        temp[0]=d[0];
-        temp[1]=(c[1]+2*d[1])/3;
-
-        c1[0]=(temp[0]+2*b1[0])/3;
-        c1[1]=b1[1];
-        d1[0]=c1[0];
-        d1[1]=a[1];
-
-        divide_square(a1,b1,c1,d1,m-1);
-    }
-    else
-    return;
-}
-void gasket(){
-    glClear(GL_COLOR_BUFFER_BIT);
-     glBegin(GL_QUADS);
-        draw_square(v1,v2,v3,v4);
-        divide_square(v1,v2,v3,v4,n-1);
-     glEnd();
+void drawsquare(float x1 , float y1 , float x2 , float y2 , float x3 , float y3 , float x4 , float y4)
+{
+    glColor3f(1.0,0.0,1.0);
+    glBegin(GL_QUADS);
+    glVertex2i(x1,y1);
+    glVertex2i(x2,y2);
+    glVertex2i(x3,y3);
+    glVertex2i(x4,y4);
+    glEnd();
     glFlush();
 }
-int main(int argc, char **argv){
+void serpenski(float x1 , float y1 , float x2 , float y2 , float x3 , float y3 , float x4 , float y4 ,int n)
+{
 
-    cout<<"Enter no. of recursive steps: ";cin>>n;
-    // cout<<"Enter vertices of triangle: (x,y)"<<endl;
-    // cout<<"point 1:"<<endl;
-    // cin>>v1[0]>>v1[1];
-    // cout<<"point 2:"<<endl;
-    // cin>>v2[0]>>v2[1];
-    // cout<<"point 3:"<<endl;
-    // cin>>v3[0]>>v3[1];
-    v1[0]=10;v1[1]=10;v2[0]=10;v2[1]=310;v3[0]=310;v3[1]=310;v4[0]=310;v4[1]=10;
+    if(n<=0)
+    {
+
+        drawsquare(x1,y1,x2,y2,x3,y3 , x4 ,y4);
+        return ;
+    }
+     n--;
     
-    //show(v1);show(v2);show(v3);show(v4);
-    glutInit(&argc,argv);
-    glutInitWindowSize(700,700);
-    glutInitWindowPosition(50,50);
-    glutCreateWindow("Sierpinski Gasket Hollow Square");
-    initGL();
-    glutDisplayFunc(gasket);
-    glutMainLoop();
-    return 0;
+  float d = (x2-x1)/3;
+  serpenski(x1,y1,x1+d,y1,x1+d,y1+d,x1,y1+d,n);
+  serpenski(x1+d,y1,x1+2*d,y1,x1+2*d,y1+d,x1+d,y1+d,n);
+  serpenski(x1+2*d,y1,x2,y2,x2,y1+d,x1+2*d,y1+d,n);
+
+  serpenski(x1,y1+d,x1+d,y1+d,x1+d,y1+2*d,x1,y1+2*d,n);
+  serpenski(x1+2*d,y1+d,x2,y1+d,x2,y1+2*d,x1+2*d,y1+2*d,n);
+
+  serpenski(x1,y1+2*d,x1+d,y1+2*d,x1+d,y4,x4,y4,n);
+  serpenski(x1+d,y1+2*d,x1+2*d,y1+2*d,x1+2*d,y4,x1+d,y4,n);
+  serpenski(x1+2*d,y1+2*d,x2,y2+2*d,x3,y3,x1+2*d,y3,n);
 }
+
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    serpenski(xt1 , yt1 , xt2 , yt2 , xt3 , yt3 , xt4 , yt4, N);
+
+}
+
+int main(int argc , char **argv)
+{
+    
+    printf("serpensiki square literal matlab nahi pata hai muhje par algo samaj aa gaya to likh diya \n");
+    printf("enter the initial coordinates of the square\n");
+    printf("x1 y1 \n");
+    cin >> xt1 >> yt1 ;
+    cout<<"x2 y2 \n";
+    cin >> xt2 >> yt2 ;
+    cout<< "x3 y3 \n";
+    cin>> xt3 >> yt3 ;
+    cout<<" x4 y4 \n";
+    cin >> xt4 >> yt4 ;
+
+    cout<<"enter the value of N \n";
+    cin>>N;
+    glutInit(&argc , argv);
+     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); 
+   glutInitWindowSize(1000, 1000); 
+   glutInitWindowPosition(0, 0); 
+   glutCreateWindow("serpenski square bolte hai isse"); 
+glutDisplayFunc(display);   
+
+   myinit();
+  
+   glutMainLoop(); 
+
+
+}
+
